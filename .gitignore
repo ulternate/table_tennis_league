@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Extra additions.
+app/staticfiles
+app/settings_local.py
+db.sqlite3
