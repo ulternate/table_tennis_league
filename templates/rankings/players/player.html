@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block page_header %}
+    {{ player.user.username }}
+{% endblock %}
+
+{% block home_link %}
+    {% include 'rankings/includes/home_link.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-12 col-md-6 col-md-offset-3">
+        <div class="row">
+            <h4 class="page-header">
+                Ranking: 
+                <span class="pull-right">
+                    {{ player.ranking }}
+                </span>
+            </h4>    
+        </div>
+        
+        <div class="row">   
+            <h4>Groups</h4>
+            {% if groups %}
+                <table class="table table-bordered table-striped">
+                    {% for group in groups %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'group' group.pk %}">
+                                    {{ group.name }}   
+                                </a>                        
+                                <a href="{% url 'edit_group' group.pk %}">
+                                    <span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true" aria-label="edit"></span>    
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>
+                    You are not a member of any groups, please join or add one via the home page.
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="row">   
+            <h4>Active Games</h4>
+            {% if players %}
+                <table class="table table-bordered table-striped">
+                    {% for game in games %}
+                        <tr>
+                            <td>{{ game }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>
+                    There are no games, please start one in your chosen group.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

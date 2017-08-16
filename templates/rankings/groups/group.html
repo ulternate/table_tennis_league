@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block page_header %}
+    {{ group.name }}
+{% endblock %}
+
+{% block home_link %}
+    {% include 'rankings/includes/home_link.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-12 col-md-6 col-md-offset-3">
+
+        <div class="row">
+            <h4>
+                Active Games
+                <a href="{% url 'create_game' group.pk %}">
+                    <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true" aria-label="start a game"></span>    
+                </a>
+            </h4>
+
+            {% if active_games %}
+                <table class="table table-bordered table-striped">
+                    {% for game in active_games %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'game' group.pk game.pk %}">
+                                    {{ game }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <a class="btn btn-primary btn-block" href="{% url 'create_game' group.pk %}">
+                    Start a game
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <h4>Players</h4>
+
+            {% if players %}
+                <table class="table table-bordered table-striped">
+                    {% for player in players %}
+                        <tr>
+                            <td>{{ player.user.username }}</td>
+                            <td>{{ player.ranking }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>
+                    There are no players, please add them by editing your group
+                    via the link below.
+                </p>
+                <p>
+                    <a href="{% url 'edit_group' group.pk %}">Edit Group</a>
+                </p>
+            {% endif %}
+        </div>
+
+        {% if completed_games %}
+            <div class="row">
+                <h4>Completed Games</h4>
+
+                <table class="table table-bordered table-striped">
+                    {% for game in completed_games %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'game' group.pk game.pk %}">
+                                    {{ game }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             name='Group',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='Enter the group name', max_length=255)),
+                ('name', models.CharField(help_text='Enter the group name', max_length=255, unique=True)),
             ],
         ),
         migrations.CreateModel(
@@ -48,12 +48,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='game',
             name='players',
-            field=models.ManyToManyField(blank=True, related_name='game_players', to='rankings.Player'),
+            field=models.ManyToManyField(blank=True, related_name='games', to='rankings.Player'),
         ),
         migrations.AddField(
             model_name='game',
             name='winner',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='game_winner', to='rankings.Player'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='winning_games', to='rankings.Player'),
         ),
         migrations.AddField(
             model_name='group',

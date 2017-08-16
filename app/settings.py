@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-    'sass_processor',
+    'widget_tweaks',
     'rankings',
 ]
 
@@ -52,6 +52,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'app.urls'
+
+LOGIN_REDIRECT_URL = 'index'
 
 TEMPLATES = [
     {
@@ -86,6 +88,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+ELO_WEIGHTING = 32
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
