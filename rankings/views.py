@@ -38,17 +38,37 @@ class PlayerView(BaseLoginMixin, TemplateView):
     template_name = 'rankings/players/player.html'
 
     def get_context_data(self, **kwargs):
+        """Compile a list of games for the player."""
+
         context = super(PlayerView, self).get_context_data(**kwargs)
 
-        player_id = self.kwargs.get('pk', None)
+        player = get_object_or_404(Player, id=self.kwargs.get('pk', None))
 
-        player = get_object_or_404(Player, id=player_id)
+        active_games = []
+        completed_games = []
+
+        for game in player.games.all():
+            group = game.group_set.first()
+            
+            if not group:
+                continue
+
+            if game.active:
+                active_games.append({
+                    'group': group,
+                    'game': game,    
+                })
+            else:
+                completed_games.append({
+                    'group': group,
+                    'game': game,
+                })
 
         context.update({
             'player': player,
             'groups': player.group_set.all(),
-            'active_games': player.games.filter(active=True),
-            'completed_games': player.games.filter(active=False),
+            'active_games': active_games,
+            'completed_games': completed_games,
         })
 
         return context
