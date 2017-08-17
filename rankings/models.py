@@ -77,7 +77,10 @@ class Player(models.Model):
     )
 
     def __str__(self):
-        return self.user.get_full_name()
+        if self.user.get_full_name():
+            return self.user.get_full_name()
+        else: 
+            return self.user.username
 
     def update_rankings(player, opponent, winner):
         """
