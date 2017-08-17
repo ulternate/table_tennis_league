@@ -47,7 +47,8 @@ class PlayerView(BaseLoginMixin, TemplateView):
         context.update({
             'player': player,
             'groups': player.group_set.all(),
-            'games': player.games.filter(active=False),
+            'active_games': player.games.filter(active=True),
+            'completed_games': player.games.filter(active=False),
         })
 
         return context
@@ -186,13 +187,12 @@ class GroupView(TemplateView):
         context = super(GroupView, self).get_context_data(**kwargs)
 
         group = get_object_or_404(Group, id=self.kwargs.get('pk', None))
-        games = group.games.all()
 
         context.update({
             'group': group,
             'players': group.players.order_by('-ranking'),
-            'active_games': games.exclude(active=False),
-            'completed_games': games.exclude(active=True),
+            'active_games': group.games.filter(active=True),
+            'completed_games': group.games.filter(active=False),
         })
 
         return context
