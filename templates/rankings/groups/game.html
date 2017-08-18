@@ -16,12 +16,20 @@
         <div class="row">
             <h4>Players</h4>
             <table class="table table-bordered table-striped">
-                {% for player in players %}
+                <thead>
                     <tr>
-                        <td>{{ player.user.username }}</td>
-                        <td>{{ player.ranking }}</td>
+                        <th>Player</th>
+                        <th>Ranking</th>
                     </tr>
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                        <tr>
+                            <td>{{ player.user.username }}</td>
+                            <td>{{ player.ranking }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
 

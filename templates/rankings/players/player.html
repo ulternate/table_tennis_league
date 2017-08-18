@@ -28,17 +28,22 @@
                             <td>
                                 <a href="{% url 'group' group.pk %}">
                                     {{ group.name }}   
-                                </a>                        
-                                <a href="{% url 'edit_group' group.pk %}">
-                                    <span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true" aria-label="edit"></span>    
                                 </a>
+                                {% if player in group.admins.all %}
+                                    <a href="{% url 'edit_group' group.pk %}">
+                                        <span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true" aria-label="Edit group"></span>
+                                    </a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
                 </table>
             {% else %}
                 <p>
-                    You are not a member of any groups, please join or add one via the home page.
+                    You are not a member of any groups, please join or add one via the groups page.
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-block" href="{% url 'groups' %}">View Groups</a>
                 </p>
             {% endif %}
         </div>
@@ -47,7 +52,7 @@
             <h4>Active Games</h4>
             {% if active_games %}
                 <table class="table table-bordered table-striped">
-                    {% for item in active_games.items %}
+                    {% for item in active_games %}
                         <tr>
                             <td>
                                 <a href="{% url 'game' item.group.pk item.game.pk %}">
