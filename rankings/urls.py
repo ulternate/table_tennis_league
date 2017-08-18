@@ -10,6 +10,7 @@ from rankings.views import (
     GroupView,
     GroupsView,
     IndexView,
+    JoinGroupView,
     PlayerView,
 )   
 
@@ -33,6 +34,11 @@ urlpatterns = [
         r'^groups/(?P<pk>\d+)/$',
         GroupView.as_view(),
         name='group',
+    ),
+    url(
+        r'^groups/(?P<pk>\d+)/join/$',
+        JoinGroupView.as_view(),
+        name='join_group',
     ),
     url(
         r'groups/(?P<group_pk>\d+)/game/(?P<game_pk>\d+)/$',

@@ -14,9 +14,11 @@
         <div class="row">
             <h4>
                 Active Games
-                <a href="{% url 'create_game' group.pk %}">
-                    <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true" aria-label="start a game"></span>    
-                </a>
+                {% if request.user.player in group.players.all %}
+                    <a href="{% url 'create_game' group.pk %}">
+                        <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true" aria-label="start a game"></span>    
+                    </a>
+                {% endif %}
             </h4>
 
             {% if active_games %}
@@ -31,9 +33,16 @@
                         </tr>
                     {% endfor %}
                 </table>
-            {% else %}
+            {% elif request.user.player in group.players.all %}
                 <a class="btn btn-primary btn-block" href="{% url 'create_game' group.pk %}">
                     Start a game
+                </a>
+            {% else %}
+                <p>
+                    There are no active games. You must join this group before you can start a game.
+                </p>
+                <a class="btn btn-primary btn-block" href="{% url 'join_group' group.pk %}">
+                    Join Group
                 </a>
             {% endif %}
         </div>

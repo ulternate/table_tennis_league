@@ -17,12 +17,21 @@
                         <a href="{% url 'group' group.pk %}">
                             {{ group.name }}
                         </a>
-                        {% if request.user.player in group.admins.all %}
-                            <a href="{% url 'edit_group' group.pk %}">
-                                <span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true" aria-label="edit"></span>    
-                            </a>
-                        {% endif %}
                     </td>
+                    {% if request.user.player not in group.players.all %}
+                        <td class="action-column text-center">
+                            <a href="{% url 'join_group' group.pk %}">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true" aria-label="Join group"></span>
+                            </a>                                
+                        </td>
+                    {% endif %}
+                    {% if request.user.player in group.admins.all %}
+                        <td class="action-column text-center">
+                            <a href="{% url 'edit_group' group.pk %}">
+                                Edit <span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true" aria-label="group"></span>    
+                            </a>                                
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>

@@ -5,7 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView
 
 from rankings.forms import RegistrationForm
@@ -231,6 +231,25 @@ class GroupView(TemplateView):
         })
 
         return context
+
+
+class JoinGroupView(BaseLoginMixin, View):
+    """Enable logged in user to join a group."""
+
+    def get(self, request, *args, **kwargs):
+
+        group = get_object_or_404(Group, id=kwargs.get('pk', None))
+
+        player = request.user.player
+
+        if player not in group.players.all():
+            group.players.add(player)
+            group.save()
+
+            return HttpResponseRedirect(
+                reverse_lazy('group', kwargs={'pk': group.pk}))
+
+        return HttpResponseRedirect(reverse_lazy('groups'))
 
 
 class EditGroupView(GroupAdminLoginMixin, SuccessMessageMixin, UpdateView):
