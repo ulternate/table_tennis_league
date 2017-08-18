@@ -47,7 +47,7 @@
             <h4>Active Games</h4>
             {% if active_games %}
                 <table class="table table-bordered table-striped">
-                    {% for item in active_games %}
+                    {% for item in active_games.items %}
                         <tr>
                             <td>
                                 <a href="{% url 'game' item.group.pk item.game.pk %}">

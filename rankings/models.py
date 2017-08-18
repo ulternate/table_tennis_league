@@ -59,6 +59,11 @@ class Group(models.Model):
         Game,
         blank=True,
     )
+    admins = models.ManyToManyField(
+        'Player',
+        related_name='group_admins',
+        blank=True,
+    )
 
     def __str__(self):
         name = self.name

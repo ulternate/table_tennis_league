@@ -17,9 +17,11 @@
                         <a href="{% url 'group' group.pk %}">
                             {{ group.name }}
                         </a>
-                        <a href="{% url 'edit_group' group.pk %}">
-                            <span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true" aria-label="edit"></span>    
-                        </a>
+                        {% if request.user.player in group.admins.all %}
+                            <a href="{% url 'edit_group' group.pk %}">
+                                <span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true" aria-label="edit"></span>    
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

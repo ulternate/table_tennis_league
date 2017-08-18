@@ -4,7 +4,6 @@ from django.conf.urls import url
 
 from rankings.views import (
     CreateGameView,
-    CreateGroupView,
     EditGroupView,
     FinishGameView,
     GameView,
@@ -49,11 +48,6 @@ urlpatterns = [
         r'^groups/edit_group/(?P<pk>\d+)/$',
         EditGroupView.as_view(),
         name='edit_group',
-    ),
-    url(
-        r'^groups/create_group/$',
-        CreateGroupView.as_view(),
-        name='create_group',
     ),
     url(
         r'^players/(?P<pk>\d+)/$',

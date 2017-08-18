@@ -50,7 +50,7 @@
                         </tr>
                     {% endfor %}
                 </table>
-            {% else %}
+            {% elif request.user.player in group.admins.all %}
                 <p>
                     There are no players, please add them by editing your group
                     via the link below.

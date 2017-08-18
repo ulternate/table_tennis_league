@@ -18,6 +18,21 @@ class BaseLoginMixin(LoginRequiredMixin):
     login_url = reverse_lazy('ranking_login')
 
 
+class GroupAdminLoginMixin(BaseLoginMixin):
+    """Simple mixin to restrict editing groups to group admins."""
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        group = get_object_or_404(Group, id=kwargs.get('pk', None))
+
+        if not request.user.player in group.admins.all():
+            return self.handle_no_permission()
+
+        return super().dispatch(request, *args, **kwargs)
+
+
 class IndexView(TemplateView):
     """Main view for site."""
 
@@ -218,23 +233,7 @@ class GroupView(TemplateView):
         return context
 
 
-class CreateGroupView(SuccessMessageMixin, CreateView):
-    """Simple Create View for adding a new Group."""
-
-    template_name = 'rankings/groups/create_group.html'
-    model = Group
-    fields = [
-        'name',
-    ]
-    success_url = reverse_lazy('groups')
-
-    def get_success_message(self, cleaned_data):
-        name = cleaned_data.get('name')
-
-        return f'{name} was created successfully'
-
-
-class EditGroupView(BaseLoginMixin, SuccessMessageMixin, UpdateView):
+class EditGroupView(GroupAdminLoginMixin, SuccessMessageMixin, UpdateView):
     """Simple EditView for editing a group."""
     
     template_name = 'rankings/groups/edit_group.html'
