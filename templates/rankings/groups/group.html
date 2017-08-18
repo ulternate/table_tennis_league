@@ -52,12 +52,20 @@
 
             {% if players %}
                 <table class="table table-bordered table-striped">
-                    {% for player in players %}
+                    <thead>
                         <tr>
-                            <td>{{ player.user.username }}</td>
-                            <td>{{ player.ranking }}</td>
+                            <th>Player</th>
+                            <th>Ranking</th>
                         </tr>
-                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        {% for player in players %}
+                            <tr>
+                                <td>{{ player.user.username }}</td>
+                                <td>{{ player.ranking }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             {% elif request.user.player in group.admins.all %}
                 <p>
