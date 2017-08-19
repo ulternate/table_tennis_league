@@ -11,6 +11,9 @@ from rankings.elo import elo
 
 class Game(models.Model):
     """Game model, represents a single game."""
+    date_time = models.DateTimeField(
+        auto_now_add=True,
+    )
 
     players = models.ManyToManyField(
         'Player',
