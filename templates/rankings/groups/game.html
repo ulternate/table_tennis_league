@@ -48,6 +48,22 @@
                         <td>{{ game.home_score }} vs {{ game.away_score }}</td>
                     </tr>
                 </table>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Ranking</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in players %}
+                            <tr>
+                                <td>{{ player.user.username }}</td>
+                                <td>{{ player.rank_change }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% endif %}
         </div>
     </div>

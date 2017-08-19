@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView
 
 from rankings.forms import RegistrationForm
-from rankings.models import Game, Group, Player
+from rankings.models import Game, Group, Player, RankChange
 
 
 class BaseLoginMixin(LoginRequiredMixin):
@@ -99,11 +99,19 @@ class GameView(TemplateView):
 
         group = get_object_or_404(Group, id=self.kwargs.get('group_pk', None))
         game = get_object_or_404(Game, id=self.kwargs.get('game_pk', None))
+        players = game.players.order_by('-ranking')
+        for player in players:
+            try:
+                rank_change = str(player.rankchange_set.get(game=game))
+            except RankChange.DoesNotExist:
+                rank_change = 'not available'
+
+            setattr(player, 'rank_change', rank_change)
 
         context.update({
             'group': group,
             'game': game,
-            'players': game.players.order_by('-ranking'),
+            'players': players,
         })
 
         return context
@@ -176,10 +184,24 @@ class FinishGameView(BaseLoginMixin, UpdateView):
 
             loser = player_1 if player_1 != game.winner else player_2
 
+            player_1_change = RankChange(game=game, player=player_1,
+                                         before=player_1.ranking)
+            player_2_change = RankChange(game=game, player=player_2,
+                                         before=player_2.ranking)
             Player.update_rankings(
                 game.winner,
                 loser
             )
+            # Players were saved through
+            # winner/loser instances, must reload.
+            player_1.refresh_from_db()
+            player_2.refresh_from_db()
+
+            player_1_change.after = player_1.ranking
+            player_2_change.after = player_2.ranking
+
+            player_1_change.save()
+            player_2_change.save()
             # Mark the game as finished.
             game.active = False
             game.save()

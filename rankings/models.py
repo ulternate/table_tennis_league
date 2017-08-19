@@ -108,6 +108,17 @@ class Player(models.Model):
         loser.save()
 
 
+class RankChange(models.Model):
+    player = models.ForeignKey(Player)
+    game = models.ForeignKey(Game)
+    before = models.FloatField()
+    after = models.FloatField()
+
+    def __str__(self):
+        delta = self.after - self.before
+        return f'{self.after:.2f} ({delta:.2f})'
+
+
 @receiver(post_save, sender=User)
 def create_player_object(sender, instance, created, **kwargs):
     """Create a player object linked to the User when the user is registered."""
