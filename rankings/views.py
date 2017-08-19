@@ -168,20 +168,18 @@ class FinishGameView(BaseLoginMixin, UpdateView):
 
     def form_valid(self, form):
         game = form.save(commit=False)
-
+        # Only update the game and rankings if it's active.
         if game.active:
-            # Only update the game and rankings if it's active.
-            
             # Update each player's ranking.
             player_1 = game.players.first()
             player_2 = game.players.last()
-            
-            Player.update_rankings(
-                player=player_1,
-                opponent=player_2,
-                winner=game.winner,
-            )
 
+            loser = player_1 if player_1 != game.winner else player_2
+
+            Player.update_rankings(
+                game.winner,
+                loser
+            )
             # Mark the game as finished.
             game.active = False
             game.save()
