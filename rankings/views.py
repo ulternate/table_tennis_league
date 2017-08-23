@@ -62,7 +62,7 @@ class PlayerView(BaseLoginMixin, TemplateView):
         active_games = []
         completed_games = []
 
-        for game in player.games.all():
+        for game in player.games.all().order_by('-date_time'):
             group = game.group_set.first()
             
             if not group:
@@ -246,8 +246,8 @@ class GroupView(TemplateView):
         context.update({
             'group': group,
             'players': group.players.order_by('-ranking'),
-            'active_games': group.games.filter(active=True),
-            'completed_games': group.games.filter(active=False),
+            'active_games': group.games.filter(active=True).order_by('-date_time'),
+            'completed_games': group.games.filter(active=False).order_by('-date_time'),
         })
 
         return context
