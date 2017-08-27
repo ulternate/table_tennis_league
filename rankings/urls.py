@@ -5,13 +5,19 @@ from django.conf.urls import url
 from rankings.views import (
     CreateGameView,
     EditGroupView,
+    EditTournamentView,
     FinishGameView,
     GameView,
     GroupView,
     GroupsView,
     IndexView,
     JoinGroupView,
+    JoinTournamentView,
     PlayerView,
+    StartTournamentView,
+    TournamentGameView,
+    TournamentView,
+    TournamentsView,
 )   
 
 urlpatterns = [
@@ -59,5 +65,35 @@ urlpatterns = [
         r'^players/(?P<pk>\d+)/$',
         PlayerView.as_view(),
         name='player_profile',
+    ),
+    url(
+        r'^tournaments/$',
+        TournamentsView.as_view(),
+        name='tournaments',
+    ),
+    url(
+        r'^tournaments/(?P<pk>\d+)/$',
+        TournamentView.as_view(),
+        name='tournament',
+    ),
+    url(
+        r'^tournaments/(?P<pk>\d+)/join/$',
+        JoinTournamentView.as_view(),
+        name='join_tournament',
+    ),
+    url(
+        r'^tournaments/(?P<pk>\d+)/start/$',
+        StartTournamentView.as_view(),
+        name='start_tournament',
+    ),
+    url(
+        r'^tournaments/edit_tournament/(?P<pk>\d+)/$',
+        EditTournamentView.as_view(),
+        name='edit_tournament',
+    ),
+    url(
+        r'tournaments/(?P<tournament_pk>\d+)/game/(?P<game_pk>\d+)/$',
+        TournamentGameView.as_view(),
+        name='tournament_game',
     ),
 ]

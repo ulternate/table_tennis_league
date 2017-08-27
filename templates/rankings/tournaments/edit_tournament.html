@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block page_header %}
+    Edit Tournament
+{% endblock %}
+
+{% block home_link %}
+    {% include 'rankings/includes/home_link.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-12 col-md-6 col-md-offset-3">
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                {{ form.non_field_errors }}
+            {% endif %}
+            
+            <div class="form-group">
+                {{ form.name.errors }}
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                {% render_field form.name class+="form-control" %}
+            </div>
+
+            <div class="checkbox">
+                {{ form.has_round_robin.errors }}
+                <label for="{{ form.has_round_robin.id_for_label }}">
+                    {% render_field form.has_round_robin class+="checkbox" %}    
+                    {{ form.has_round_robin.label }}                    
+                </label>
+            </div>
+
+            <div id="no_round_robin_rounds_container" class="form-group">
+                {{ form.no_round_robin_rounds.errors }}
+                <label for="{{ form.no_round_robin_rounds.id_for_label }}">{{ form.no_round_robin_rounds.label }}</label>
+                {% render_field form.no_round_robin_rounds class+="form-control" %}
+            </div>
+
+            <div class="checkbox">
+                {{ form.has_elimination.errors }}
+                <label>
+                    {% render_field form.has_elimination class+="checkbox" %}    
+                    {{ form.has_elimination.label }}                    
+                </label>
+            </div>
+
+            <div id="no_players_for_elimination_rounds_container" class="form-group">
+                {{ form.no_players_for_elimination_rounds.errors }}
+                <label for="{{ form.no_players_for_elimination_rounds.id_for_label }}">
+                    {{ form.no_players_for_elimination_rounds.label }}
+                </label>
+                {% render_field form.no_players_for_elimination_rounds class+="form-control" %}
+            </div>
+
+            <div class="form-group">
+                {{ form.players.errors }}
+                <label for="{{ form.players.id_for_label }}">{{ form.players.label }}</label>
+                {% render_field form.players class+="form-control" %}
+            </div>
+
+            <input class="btn btn-primary btn-block" type="submit" value="Save" />
+        </form>
+    </div>
+
+    <script>
+        {# Toggle visibility of the number fields based upon the checkbox states. #}
+        $(function () {
+            $('#{{ form.has_round_robin.id_for_label }}').change(function () {                
+                $('#no_round_robin_rounds_container').toggle(this.checked);
+            }).change(); //ensure visible state matches initially
+        });
+
+        $(function () {
+            $('#{{ form.has_elimination.id_for_label }}').change(function () {                
+                $('#no_players_for_elimination_rounds_container').toggle(this.checked);
+            }).change(); //ensure visible state matches initially
+        });
+    </script>
+{% endblock %}

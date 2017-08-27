@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from rankings.models import Game, Group, Player
+from rankings.models import Game, Group, Player, Tournament
 
 
 class PlayerInline(admin.StackedInline):
@@ -40,9 +40,16 @@ class PlayerAdmin(admin.ModelAdmin):
     model = Player
 
 
+class TournamentAdmin(admin.ModelAdmin):
+    """Admin for Tournament Objects."""
+
+    model = Tournament
+
+
 # Re-register UserAdmin
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Player, PlayerAdmin)
+admin.site.register(Tournament, TournamentAdmin)

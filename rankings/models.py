@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from rankings.elo import elo
+from rankings.utils import elo
 
 
 class Game(models.Model):
@@ -22,6 +22,12 @@ class Game(models.Model):
     )
     active = models.BooleanField(
         default=True,
+    )
+    tournament_game = models.BooleanField(
+        default=False,
+    )
+    elimination_game = models.BooleanField(
+        default=False,
     )
     winner = models.ForeignKey(
         'Player',
@@ -45,7 +51,7 @@ class Game(models.Model):
         if winner:
             return f'Game {id_}: won by {winner}'
 
-        return f'Game {id_}: in progress'
+        return f'Game {id_}: {self.players.first()} vs {self.players.last()}'
 
 
 class Group(models.Model):
@@ -120,6 +126,52 @@ class RankChange(models.Model):
     def __str__(self):
         delta = self.after - self.before
         return f'{self.after:.2f} ({delta:.2f})'
+
+
+class Tournament(models.Model):
+    """Tournament model, store the tournament configuration."""
+    active = models.BooleanField(
+        default=True,
+    )
+    name = models.CharField(
+        max_length=255,
+        help_text="Enter the tournament name",
+    )
+    has_round_robin = models.BooleanField(
+        verbose_name="Are there Round Robin rounds?",
+    )
+    no_round_robin_rounds = models.PositiveIntegerField(
+        verbose_name="Number of Round Robin rounds",
+        default=0,
+    )
+    round_robin_finished = models.BooleanField(
+        default=False,
+    )
+    has_elimination = models.BooleanField(
+        verbose_name="Are there Elimination rounds?",
+    )
+    no_players_for_elimination_rounds = models.PositiveIntegerField(
+        verbose_name="Number of players for Elimination rounds",
+        default=0,
+    )
+    games = models.ManyToManyField(
+        Game,
+        related_name="tournaments",
+        blank=True,
+    )
+    players = models.ManyToManyField(
+        Player,
+        related_name="tournaments",
+        blank=True,
+    )    
+    admins = models.ManyToManyField(
+        Player,
+        related_name='tournament_admins',
+        blank=True,
+    )
+
+    def __str__(self):
+        return self.name
 
 
 @receiver(post_save, sender=User)
